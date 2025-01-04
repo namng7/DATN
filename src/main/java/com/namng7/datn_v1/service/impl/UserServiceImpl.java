@@ -33,29 +33,42 @@ public class UserServiceImpl implements UserService {
     @Override
     public ProcessRecord registerUser(ProcessRecord registerProcessRecord) {
         try {
+
             User user = registerProcessRecord.getUser();
-            if (UserUtil.validateUser(user) != Key.ErrorCode.SUCCESS) {
+            if (user.getUsername() == null || "".equals(user.getUsername())) {
                 registerProcessRecord.setErrorCode(Key.ErrorCode.INVALID_USER);
                 registerProcessRecord.setMessage(MessageUtil.getMessage(Key.Message.INVALID_REGISTER_USER, logger));
                 return registerProcessRecord;
             }
             User cacheUser = CacheManager.Users.MapUserByUsername.get(user.getUsername());
+            User registerInfo = user;
+            registerInfo.setStatus(Key.Status.INACTIVE);
+            if(cacheUser != null && cacheUser.getRole().equals(Key.Role.ADMIN) && registerProcessRecord.getObject()!=null){
+                user = cacheUser;
+                registerInfo = UserUtil.convertMaptoPojo((LinkedHashMap<String, Object>) registerProcessRecord.getObject());
+                registerInfo.setStatus(Key.Status.ACTIVE);
+                cacheUser = CacheManager.Users.MapUserByUsername.get(registerInfo.getUsername());
+            }
+            if (registerInfo.getRole() == null) {
+                registerInfo.setRole(Key.Role.COMPANY);
+            }
             if (cacheUser != null) {
                 registerProcessRecord.setErrorCode(Key.ErrorCode.INVALID_USER);
                 registerProcessRecord.setMessage(MessageUtil.getMessage(Key.Message.USER_ALREADY_EXISTS, logger));
                 log.setLength(0);
-                log.append("User: ").append(registerProcessRecord.getUser().getUsername()).
+                log.append("User: ").append(cacheUser.getUsername()).
                         append(": Da ton tai.");
                 logger.info(log.toString());
                 return registerProcessRecord;
             }
-            user.setCreated_time(new Date());
-            User savedUser = UserUtil.saveUser(user, passwordEncoder, userRepository);
-            registerProcessRecord.setUser(savedUser);
+            registerInfo.setCreated_time(new Date());
+            User savedUser = UserUtil.saveUser(registerInfo, passwordEncoder, userRepository);
+            registerProcessRecord.setUser(user);
+            registerProcessRecord.setObject(savedUser);
             registerProcessRecord.setErrorCode(Key.ErrorCode.SUCCESS);
             registerProcessRecord.setMessage(MessageUtil.getMessage(Key.Message.REGISTER_USER_SUCCESS, logger));
             log.setLength(0);
-            log.append("User: ").append(registerProcessRecord.getUser().getUsername()).
+            log.append("User: ").append(savedUser.getUsername()).
                     append(": da dang ky thanh cong!");
             logger.info(log.toString());
         } catch (Exception e) {
@@ -96,11 +109,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public ProcessRecord updateInfor(ProcessRecord updateRecord) {
         try {
-            User userUpdate = UserUtil.convertMaptoPojo((LinkedHashMap<String, Object>) updateRecord.getObject());
+            User updateInfo = UserUtil.convertMaptoPojo((LinkedHashMap<String, Object>) updateRecord.getObject());
             User user = CacheManager.Users.MapUserByUsername.get(updateRecord.getUser().getUsername());
 
-            if (user == null || userUpdate == null || userUpdate.getUsername() == null
-                    || CacheManager.Users.MapUserByUsername.get(userUpdate.getUsername()) == null) {
+            if (user == null || updateInfo == null || updateInfo.getUsername() == null
+                    || CacheManager.Users.MapUserByUsername.get(updateInfo.getUsername()) == null) {
                 updateRecord.setErrorCode(Key.ErrorCode.INVALID_USER);
                 updateRecord.setMessage(MessageUtil.getMessage(Key.Message.INVALID_USER, logger));
                 log.setLength(0);
@@ -110,12 +123,12 @@ public class UserServiceImpl implements UserService {
                 return updateRecord;
             }
 
-            userUpdate = CacheManager.Users.MapUserByUsername.get(userUpdate.getUsername());
+            User userUpdate = CacheManager.Users.MapUserByUsername.get(updateInfo.getUsername());
 
-            User userChange = null;
+            boolean isPassCheckUserUpdate = false;
 
             if (userUpdate.getUsername().equals(user.getUsername())) {
-                userChange = user;
+                isPassCheckUserUpdate = true;
                 log.setLength(0);
                 log.append("User: ").append(userUpdate.getUsername()).
                         append(": cap nhat thong tin.");
@@ -123,29 +136,29 @@ public class UserServiceImpl implements UserService {
             } else if (user.getRole() == Key.Role.ADMIN ||
                     (user.getRole() == Key.Role.BUSSINESS && user.getRole() == Key.Role.COMPANY &&
                             (user.getStatus() == 0 || CacheManager.Companys.mapCompany.get(user.getId()).getBussiness_care().equals(CacheManager.Users.AUTH_USER.getId())))) {
-                userChange = user;
+                isPassCheckUserUpdate = true;
                 log.setLength(0);
                 log.append("User: ").append(user.getUsername()).
-                        append(": cap nhat thong tin cho user: ").append(userChange.getUsername());
+                        append(": cap nhat thong tin cho user: ").append(userUpdate.getUsername());
                 logger.info(log.toString());
             }
 
-            if (userChange != null) {
+            if (isPassCheckUserUpdate) {
                 try {
-                    UserUtil.mergeInfor(updateRecord.getUser(), user);
+                    UserUtil.mergeInfor(updateInfo, user);
                     User savedUser = UserUtil.saveUser(user, passwordEncoder, userRepository);
                     updateRecord.setUser(savedUser);
                     updateRecord.setErrorCode(Key.ErrorCode.SUCCESS);
                     updateRecord.setMessage(MessageUtil.getMessage(Key.Message.UPDATE_USER_INFO_SUCCESS, logger));
                     log.setLength(0);
-                    log.append("User: ").append(userChange.getUsername()).
+                    log.append("User: ").append(user.getUsername()).
                             append(": da cap nhat thong tin thanh cong!");
                     logger.info(log.toString());
                 } catch (Exception e) {
                     log.setLength(0);
                     updateRecord.setErrorCode(Key.ErrorCode.SYSTEM_FAULT);
                     updateRecord.setMessage(MessageUtil.getMessage(Key.Message.SYSTEM_FAULT, logger));
-                    log.append("User: ").append(userChange.getUsername()).
+                    log.append("User: ").append(user.getUsername()).
                             append(": loi khi cap nhat thong tin tai khoan");
                     logger.error(log.toString(), e);
                 }

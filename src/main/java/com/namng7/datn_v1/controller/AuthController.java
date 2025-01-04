@@ -25,8 +25,7 @@ public class AuthController {
     private UserService userServiceImpl;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
-        ProcessRecord record = new ProcessRecord(user);
+    public ResponseEntity<?> registerUser(@RequestBody ProcessRecord record) {
         try {
             userServiceImpl.registerUser(record);
 //            logger.info("Start reload data...");
@@ -46,8 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User user) {
-        ProcessRecord loginRecord = new ProcessRecord(user);
+    public ResponseEntity<?> loginUser(@RequestBody ProcessRecord loginRecord) {
         try {
             userServiceImpl.loginUser(loginRecord);
             return ResponseEntity.ok(loginRecord);
@@ -68,8 +66,8 @@ public class AuthController {
 
 
     @PostMapping("/getUserByUserName")
-    public ResponseEntity<?> getUserByUserName(@RequestBody User user){
-        ProcessRecord record = new ProcessRecord(user);
+    public ResponseEntity<?> getUserByUserName(@RequestBody ProcessRecord record){
+
         try{
             userServiceImpl.getUserByUserName(record);
             return ResponseEntity.ok(record);

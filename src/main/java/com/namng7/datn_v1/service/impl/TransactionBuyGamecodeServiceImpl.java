@@ -172,7 +172,7 @@ public class TransactionBuyGamecodeServiceImpl implements TransactionBuyGamecode
                 emailContent.append('\n' + aesEncryptionService.decrypt(detail.getGamecode())).append("\t thời hạn: ").append(detail.getValid_date());
             }
             logger.info(emailContent.toString());
-            //emailService.sendEmail(record.getUser().getEmail(),"TB: Mua gamecode thành công!", emailContent.toString());
+            emailService.sendEmail(record.getUser().getEmail(),"TB: Mua gamecode thành công!", emailContent.toString());
             record.setObject(savedTrans);
             record.setErrorCode(Key.ErrorCode.SUCCESS);
             record.setMessage(MessageUtil.getMessage(Key.Message.INVALID_COMPANY, logger));

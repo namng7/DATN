@@ -6,7 +6,7 @@ import com.namng7.datn_v1.model.Company;
 import com.namng7.datn_v1.model.User;
 import com.namng7.datn_v1.object.ProcessRecord;
 import com.namng7.datn_v1.service.CompanyService;
-import com.namng7.datn_v1.service.impl.CompanyServiceImpl;
+import com.namng7.datn_v1.util.UserUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.LinkedHashMap;
 
 @RestController
 @RequestMapping("/api/datn/company")
@@ -26,11 +28,9 @@ public class CompanyController {
     private CompanyService companyService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerCompany(@RequestBody Company company){
-        ProcessRecord record = new ProcessRecord();
-        record.setObject(company);
+    public ResponseEntity<?> registerCompany(@RequestBody ProcessRecord record){
         try{
-            companyService.registerCompany(record);
+            companyService.acceptRegisterCompany(record);
             return ResponseEntity.ok(record);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(record);
@@ -38,9 +38,9 @@ public class CompanyController {
     }
 
     @PostMapping("/getCompanyByUserID")
-    public  ResponseEntity<?> getCompanyByUserID(@RequestBody User user){
-        ProcessRecord record = new ProcessRecord(user);
+    public  ResponseEntity<?> getCompanyByUserID(@RequestBody ProcessRecord record){
         try {
+            User user = UserUtil.convertMaptoPojo((LinkedHashMap<String, Object>) record.getObject());
             if (user.getId() == null || user.getId() < 1) {
                 record.setErrorCode(Key.ErrorCode.INVALID_USER);
                 record.setMessage(Key.Message.INVALID_USER);

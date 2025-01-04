@@ -22,7 +22,7 @@ public class EmailService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setFrom("namhhbg0001@gmail.com");
+        helper.setFrom("nam.ng205103@sis.hust.edu.vn");
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(body, true);  // Set 'true' if the body contains HTML
