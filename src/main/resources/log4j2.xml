@@ -1,13 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="debug" name="DATN_Namng7" packages="">
     <Appenders>
+        <!-- Appender cho Console -->
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
+
+        <!-- RollingFileAppender để ghi log ra file và tự động nén khi đạt kích thước hoặc sau 60 phút -->
+        <RollingFile name="RollingFileAppender" fileName="full/log"
+                     filePattern="full/log-%d{yyyy-MM-dd-HH}.zip">
+            <!-- Định dạng log -->
+            <PatternLayout>
+                <Pattern>%d{ISO8601} [%t] %-5level: %msg%n</Pattern>
+            </PatternLayout>
+            <!-- Cấu hình rolling khi file quá 10MB hoặc sau mỗi 60 phút -->
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+            <!-- Nén log cũ bằng zip -->
+            <DefaultRolloverStrategy compress="zip" />
+        </RollingFile>
     </Appenders>
+
     <Loggers>
+        <!-- Loại bỏ log từ Spring Boot và các thư viện khác -->
+        <Logger name="org.springframework" level="WARN"/>
+        <Logger name="org.springframework.boot" level="WARN"/>
+        <Logger name="org.hibernate" level="WARN"/>
+
+        <!-- Log của ứng dụng của bạn -->
         <Root level="debug">
             <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFileAppender"/>
         </Root>
     </Loggers>
 </Configuration>
