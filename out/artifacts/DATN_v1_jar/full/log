@@ -1,0 +1,58 @@
+2025-01-05T13:00:00,658 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:00:00,663 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:00:30,664 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:00:30,665 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:01:00,672 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:01:00,672 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:01:30,677 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:01:30,677 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:02:00,694 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:02:00,694 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:02:30,697 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:02:30,697 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:03:00,697 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:03:00,697 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:03:30,713 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:03:30,713 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:04:00,715 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:04:00,716 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:04:30,718 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:04:30,719 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:05:00,721 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:05:00,721 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:05:30,728 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:05:30,729 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:06:00,739 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:06:00,739 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:06:30,754 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:06:30,754 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:07:00,764 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:07:00,765 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:07:30,773 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:07:30,773 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:08:00,783 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:08:00,784 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:08:30,789 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:08:30,790 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:09:00,791 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:09:00,792 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:09:30,798 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:09:30,799 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:10:00,808 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:10:00,809 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:10:30,825 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:10:30,826 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:11:00,843 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:11:00,843 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:11:30,847 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:11:30,847 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:12:00,850 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:12:00,850 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:12:30,853 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:12:30,853 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:13:00,859 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:13:00,859 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:13:30,860 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:13:30,862 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.
+2025-01-05T13:14:00,863 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2025-01-05T13:14:00,863 [HikariPool-1 housekeeper] DEBUG: HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled.

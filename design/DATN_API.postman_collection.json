@@ -252,6 +252,50 @@
 						"url": "http://localhost:8888/api/datn/service/updateGamecodeModel"
 					},
 					"response": []
+				},
+				{
+					"name": "generateGamecode",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8866/api/datn/gamecode/generateGamecode"
+					},
+					"response": []
+				},
+				{
+					"name": "buyGamecode",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"errorCode\": 0,\r\n    \"user\": {\r\n        \"id\": 13,\r\n        \"username\": \"traduvi8\",\r\n        \"password\": \"$2a$10$lR35j6Bzb4ea7sc/QFnA7uLexKBd/E4.bIlTDaUepTi.2ajY./kvW\",\r\n        \"email\": \"traduvi1@giangnam.com.vn\",\r\n        \"fullname\": \"Dương Thị Trang\",\r\n        \"status\": 1,\r\n        \"role\": 3,\r\n        \"created_time\": \"2024-12-13T22:28:06.000+00:00\",\r\n        \"updated_time\": \"2024-12-17T18:17:23.000+00:00\"\r\n    },\r\n    \"message\": \"Chưa cấu hình thông điệp\",\r\n    \"object\": {\r\n        \"total_item\" :  10,\r\n        \"model_id\" : 4\r\n    }\r\n       \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8888/api/datn/service/buyGamecode"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		}
