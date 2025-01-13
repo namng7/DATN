@@ -10,4 +10,5 @@ public interface CompanyService {
     void acceptRegisterCompany(ProcessRecord record);
     void updateCompany(ProcessRecord record);
     void getAllCompanybyRole(ProcessRecord record);
+    void registerCompany(ProcessRecord record);
 }

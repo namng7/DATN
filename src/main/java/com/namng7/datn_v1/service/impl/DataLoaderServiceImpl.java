@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,45 +42,23 @@ public class DataLoaderServiceImpl implements DataLoaderService {
     private ConfigurationRepository configurationRepository;
 
     @Override
-    public Map<String, User> loadAllUser() {
+    public List<User> loadAllUser() {
         List<User> listUsers = userRepository.findAll();
-        Map<String, User> mapUsers = new HashMap<>();
         if(listUsers == null || listUsers.isEmpty()){
             logger.error("Load user fail! ");
-            return mapUsers;
+            return new ArrayList<>();
         }
-        for(User user : listUsers){
-            mapUsers.put(user.getUsername(), user);
-        }
-        return mapUsers;
+        return listUsers;
     }
 
     @Override
-    public Map<Long, User> mapUserByUserID() {
-        List<User> listUsers = userRepository.findAll();
-        Map<Long, User> mapUsers = new HashMap<>();
-        if(listUsers == null || listUsers.isEmpty()){
-            logger.error("Load user fail! ");
-            return mapUsers;
-        }
-        for(User user : listUsers){
-            mapUsers.put(user.getId(), user);
-        }
-        return mapUsers;
-    }
-
-    @Override
-    public Map<Long, Company> loadAllCompany() {
+    public List<Company> loadAllCompany() {
         List<Company> listAllCompany = companyRepository.findAll();
-        Map<Long, Company> mapAllCompany = new HashMap<>();
         if(listAllCompany == null || listAllCompany.isEmpty()){
             logger.warn("Load company fail!");
-            return mapAllCompany;
+            return new ArrayList<>();
         }
-        for(Company company : listAllCompany){
-            mapAllCompany.put(company.getUser_id(), company);
-        }
-        return mapAllCompany;
+        return listAllCompany;
     }
 
     @Override
@@ -93,17 +72,13 @@ public class DataLoaderServiceImpl implements DataLoaderService {
     }
 
     @Override
-    public Map<Long, PackageConfig> loadAllPackageConfig() {
+    public List<PackageConfig> loadAllPackageConfig() {
         List<PackageConfig> listAllPackageConfig = packageConfigRepository.findAll();
-        Map<Long, PackageConfig> mapAllPackageConfig = new HashMap<>();
         if(listAllPackageConfig == null || listAllPackageConfig.isEmpty()) {
             logger.warn("Load packageConfig fail!");
-            return mapAllPackageConfig;
+            return new ArrayList<>();
         }
-        for(PackageConfig packageConfig : listAllPackageConfig){
-            mapAllPackageConfig.put(packageConfig.getId(), packageConfig);
-        }
-        return mapAllPackageConfig;
+        return listAllPackageConfig;
     }
 
     @Override

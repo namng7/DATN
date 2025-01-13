@@ -3,8 +3,8 @@ package com.namng7.datn_v1.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.namng7.datn_v1.cache.CacheManager;
 import com.namng7.datn_v1.cache.Key;
+import com.namng7.datn_v1.config.CustomObjectMapper;
 import com.namng7.datn_v1.model.Company;
-import com.namng7.datn_v1.model.User;
 import com.namng7.datn_v1.object.ProcessRecord;
 import com.namng7.datn_v1.repository.CompanyRepository;
 
@@ -21,11 +21,11 @@ public class CompanyUtil {
 
     public static Company saveCompany(Company company, CompanyRepository companyRepository) throws Exception{
         Company savedCompany = companyRepository.save(company);
-        if (CacheManager.Companys.mapCompany == null) {
-            CacheManager.Companys.mapCompany = new HashMap<>();
+        if (CacheManager.Companys.MapCompany == null) {
+            CacheManager.Companys.MapCompany = new HashMap<>();
         }
 
-        CacheManager.Companys.mapCompany.put(savedCompany.getBussiness_care(), savedCompany);
+        CacheManager.Companys.MapCompany.put(savedCompany.getBussiness_care(), savedCompany);
         return savedCompany;
     }
 
@@ -46,13 +46,13 @@ public class CompanyUtil {
         }
 
         if(isChange){
-            targetCompany.setUpdated_by(CacheManager.Users.AUTH_USER.getId());
+            targetCompany.setUpdated_by(record.getUser().getId());
             targetCompany.setUpdated_time(new Date());
         }
     }
 
     public static Company convertMaptoPojo(LinkedHashMap<String, Object> map) throws Exception{
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = CustomObjectMapper.getObjectMapper();
         return objectMapper.convertValue(map, Company.class);
     }
 }

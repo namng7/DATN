@@ -73,12 +73,16 @@ public class Key {
         public static final String INVALID_ADD_PACKAGE = "INVALID_ADD_PACKAGE";
         public static final String ADD_PACKAGE_SUCCESS = "ADD_PACKAGE_SUCCESS";
         public static final String UPDATE_PACKAGE_SUCCESS = "UPDATE_PACKAGE_SUCCESS";
+        public static final String GET_PACKAGE_SUCCESS = "GET_PACKAGE_SUCCESS";
         // </editor-fold>
 
         // <editor-fold desc="ErrorCode tac dong service config">
         public static final String INVALID_ADD_SERVICE = "INVALID_ADD_SERVICE";
+        public static final String INVALID_GET_SERVICE = "INVALID_GET_SERVICE";
         public static final String ADD_SERVICE_SUCCESS = "ADD_SERVICE_SUCCESS";
         public static final String UPDATE_SERVICE_SUCCESS = "UPDATE_SERVICE_SUCCESS";
+        public static final String GET_SERVICE_BY_COMPANY_SUCCESS = "GET_SERVICE_BY_COMPANY_SUCCESS";
+        public static final String GET_SERVICE_BY_COMPANY_FAULT = "GET_SERVICE_BY_COMPANY_FAULT";
         // </editor-fold>
 
         // <editor-fold desc="ErrorCode tac dong gamecodeModel">
@@ -87,6 +91,17 @@ public class Key {
         public static final String UPDATE_MODEL_SUCCESS = "UPDATE_MODEL_SUCCESS";
 
         public static final String GET_MODEL_SUCCESS = "GET_MODEL_SUCCESS";
+        // </editor-fold>
+
+        // <editor-fold desc="ErrorCode tac dong transaction">
+        public static final String INVALID_TRANS_BUY_GAMECODE = "INVALID_TRANS_BUY_GAMECODE";
+        public static final String INVALID_TRANS_TOP_UP = "INVALID_TRANS_TOP_UP";
+        public static final String NOT_ENOUGH_MONEY = "NOT_ENOUGH_MONEY";
+        public static final String BUY_GAMECODE_SUCCESS = "BUY_GAMECODE_SUCCESS";
+        public static final String CREATE_TRANS_TOPUP_SUCCESS = "CREATE_TRANS_TOPUP_SUCCESS";
+        public static final String ACCEPT_TRANS_TOPUP_SUCCESS = "ACCEPT_TRANS_TOPUP_SUCCESS";
+        public static final String GET_TRANS_BUY_GAMECODE_SUCCESS = "GET_TRANS_BUY_GAMECODE_SUCCESS";
+        public static final String GET_TRANS_TOP_UP_SUCCESS = "GET_TRANS_TOP_UP_SUCCESS";
         // </editor-fold>
 
         // <editor-fold desc="ErrorCode tac dong company">

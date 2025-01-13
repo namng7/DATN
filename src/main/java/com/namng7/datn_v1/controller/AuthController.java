@@ -7,12 +7,14 @@ import com.namng7.datn_v1.service.UserService;
 import com.namng7.datn_v1.service.impl.DataLoaderServiceImpl;
 import com.namng7.datn_v1.service.impl.UserServiceImpl;
 import com.namng7.datn_v1.cache.CacheManager;
+import com.namng7.datn_v1.util.UserUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
@@ -57,10 +59,22 @@ public class AuthController {
     @PostMapping("/update")
     public ResponseEntity<?> updateInfo(@RequestBody ProcessRecord updateRecord){
         try {
+            User updateInfo = UserUtil.convertMaptoPojo((LinkedHashMap<String, Object>) updateRecord.getObject());
+            updateRecord.setObject(updateInfo);
             userServiceImpl.updateInfor(updateRecord);
             return ResponseEntity.ok(updateRecord);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(updateRecord);
+        }
+    }
+
+    @PostMapping("/getAllUserByRole")
+    public ResponseEntity<?> getAllUserByRole(@RequestBody ProcessRecord record){
+        try{
+            userServiceImpl.getAllUserByRole(record);
+            return  ResponseEntity.ok(record);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(record);
         }
     }
 

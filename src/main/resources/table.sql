@@ -26,7 +26,7 @@ CREATE TABLE company
     address        VARCHAR(500),
     bank           VARCHAR(100) NOT NULL,
     `status`       INT       DEFAULT 0,
-    create_by      INT          NOT NULL,
+    create_by      INT,
     created_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_by     INT,
     updated_reason VARCHAR(1000),
@@ -48,18 +48,21 @@ CREATE TABLE wallet
         ON UPDATE CASCADE
 );
 
-create table transaction_top_up
-(
-    id               int auto_increment primary key,
-    wallet_id        int not null,
-    value            int not null,
-    wallet_balance   int,
-    status           int       DEFAULT 0,
-    bussiness_id     int not null,
-    transaction_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    INDEX            idx_name (bussiness_id),
-    foreign key (wallet_id) references wallet (id),
-    foreign key (bussiness_id) references user (id)
+CREATE TABLE `transaction_top_up` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `wallet_id` int(11) NOT NULL,
+  `value` int(11) NOT NULL,
+  `wallet_balance` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT 0,
+  `bussiness_id` int(11) NOT NULL,
+  `transaction_time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `accept_time` timestamp ,
+  PRIMARY KEY (`id`),
+  KEY `idx_name` (`bussiness_id`),
+  KEY `trans_top_up_trans_time_idx` (`transaction_time`),
+  KEY `trans_top_up_walletID_idx` (`wallet_id`),
+  CONSTRAINT `transaction_top_up_ibfk_1` FOREIGN KEY (`wallet_id`) REFERENCES `wallet` (`id`),
+  CONSTRAINT `transaction_top_up_ibfk_2` FOREIGN KEY (`bussiness_id`) REFERENCES `user` (`id`)
 );
 
 
@@ -111,19 +114,24 @@ create table gamecode_model
     number_required int         not null,
     foreign key (create_user_id) references user (id),
     foreign key (updated_user_id) references user (id),
-    foreign key (package_id) references package (id)
+    foreign key (package_id) references package_config (id)
 );
 
-create table transaction_buy_gamecode
-(
-    id                 INT AUTO_INCREMENT PRIMARY KEY,
-    company_id         int,
-    wallet_before      int not null,
-    wallet_after       int not null,
-    wallet_consumption int not null,
-    transaction_time   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    total_item         int not null,
-    FOREIGN KEY (company_id) REFERENCES company (id)
+CREATE TABLE `transaction_buy_gamecode` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) DEFAULT NULL,
+  `wallet_before` int(11) NOT NULL,
+  `wallet_after` int(11) NOT NULL,
+  `wallet_consumption` int(11) NOT NULL,
+  `transaction_time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `total_item` int(11) NOT NULL,
+  `model_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `model_id` (`model_id`),
+  KEY `trans_buy_code_companyID` (`company_id`),
+  KEY `trans_buy_code_trans_time_idx` (`transaction_time`),
+  CONSTRAINT `transaction_buy_gamecode_ibfk_1` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
+  CONSTRAINT `transaction_buy_gamecode_ibfk_2` FOREIGN KEY (`model_id`) REFERENCES `gamecode_model` (`id`)
 );
 
 create table service_config
@@ -135,7 +143,9 @@ create table service_config
     start_date        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     valid_date        TIMESTAMP,
     export_status     int       default 0,
+    model_id          int,
     FOREIGN KEY (company_id) REFERENCES company (id),
+    FOREIGN KEY (model_id) REFERENCES gamecode_model (id),
     FOREIGN KEY (gamecode_model_id) REFERENCES gamecode_model (id)
 );
 
@@ -156,4 +166,16 @@ create table gamecode_detail
     start_date  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     valid_date  TIMESTAMP,
     status      int       default 0
+);
+
+create table transaction_buy_gamecode_detail(
+	id              INT AUTO_INCREMENT PRIMARY KEY,
+	trans_id int not null,
+	serial varchar(100) not null,
+	create_date timestamp not null,
+	start_date timestamp not null,
+	valid_date timestamp ,
+	status int,
+	index transId_idx (trans_id),
+	foreign key (trans_id) references transaction_buy_gamecode (id)
 );

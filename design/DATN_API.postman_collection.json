@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "441854aa-77ac-4039-95ec-d67ce62db56f",
 		"name": "DATN_API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "33604032"
 	},
 	"item": [
@@ -23,7 +23,20 @@
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/auth/register"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"auth",
+								"register"
+							]
+						}
 					},
 					"response": []
 				},
@@ -34,14 +47,27 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"username\": \"traduvi7\",\r\n  \"password\": \"@traduvi1\"\r\n}",
+							"raw": "{\r\n    \"user\": {\r\n        \"id\": 2,\r\n        \"username\": \"traduvi2\",\r\n        \"password\": \"1\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/auth/login"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"auth",
+								"login"
+							]
+						}
 					},
 					"response": []
 				},
@@ -59,7 +85,20 @@
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/auth/update"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/auth/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"auth",
+								"update"
+							]
+						}
 					},
 					"response": []
 				},
@@ -77,7 +116,51 @@
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/auth/getUserByUserName"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/auth/getUserByUserName",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"auth",
+								"getUserByUserName"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllUserByRole",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\":{\n        \"username\": \"traduvi1\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8888/api/datn/auth/getAllUserByRole",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"auth",
+								"getAllUserByRole"
+							]
+						}
 					},
 					"response": []
 				}
@@ -100,7 +183,20 @@
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/company/register"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/company/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"company",
+								"register"
+							]
+						}
 					},
 					"response": []
 				},
@@ -118,7 +214,20 @@
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/company/getCompanyByUserID"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/company/getCompanyByUserID",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"company",
+								"getCompanyByUserID"
+							]
+						}
 					},
 					"response": []
 				},
@@ -136,7 +245,82 @@
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/company/updateCompany"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/company/updateCompany",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"company",
+								"updateCompany"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "acceptRegisterCompany",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\": {\n        \"username\": \"traduvi2\"\n    },\n    \"object\": {\n        \"id\": 1,\n        \"code\": \"HUST\",\n        \"name\": \"Hanoi University of Science and Technology\",\n        \"description\": \"Đại học Bách Khoa Hà Nội\",\n        \"industry\": null,\n        \"tax\": \"123456\",\n        \"email\": \"bkhn@hust.edu.vn\",\n        \"phone\": \"0123456789\",\n        \"represent\": \"Huỳnh Quyết Thắng\",\n        \"address\": \"Số 1, Đại Cồ Việt, Hà Nội\",\n        \"bank\": \"123456798\",\n        \"status\": 0,\n        \"create_by\": null,\n        \"created_time\": null,\n        \"updated_by\": null,\n        \"updated_time\": null,\n        \"updated_reason\": null,\n        \"bussiness_care\": null,\n        \"user_id\": 4\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8888/api/datn/company/acceptRegisterCompany",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"company",
+								"acceptRegisterCompany"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCompanyByRole",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\":{\n        \"username\": \"traduvi2\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8888/api/datn/company/getCompanyByRole",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"company",
+								"getCompanyByRole"
+							]
+						}
 					},
 					"response": []
 				}
@@ -159,7 +343,20 @@
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/service/addPackage"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/service/addPackage",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"service",
+								"addPackage"
+							]
+						}
 					},
 					"response": []
 				},
@@ -177,7 +374,20 @@
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/service/addModel"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/service/addModel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"service",
+								"addModel"
+							]
+						}
 					},
 					"response": []
 				},
@@ -195,7 +405,20 @@
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/service/addServiceConfig"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/service/addServiceConfig",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"service",
+								"addServiceConfig"
+							]
+						}
 					},
 					"response": []
 				},
@@ -213,7 +436,20 @@
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/service/updateServiceConfig"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/service/updateServiceConfig",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"service",
+								"updateServiceConfig"
+							]
+						}
 					},
 					"response": []
 				},
@@ -231,7 +467,20 @@
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/service/updatePackageConfig"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/service/updatePackageConfig",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"service",
+								"updatePackageConfig"
+							]
+						}
 					},
 					"response": []
 				},
@@ -249,7 +498,20 @@
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/service/updateGamecodeModel"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/service/updateGamecodeModel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"service",
+								"updateGamecodeModel"
+							]
+						}
 					},
 					"response": []
 				},
@@ -267,10 +529,90 @@
 								}
 							}
 						},
-						"url": "http://localhost:8866/api/datn/gamecode/generateGamecode"
+						"url": {
+							"raw": "http://localhost:8866/api/datn/gamecode/generateGamecode",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8866",
+							"path": [
+								"api",
+								"datn",
+								"gamecode",
+								"generateGamecode"
+							]
+						}
 					},
 					"response": []
 				},
+				{
+					"name": "getServiceConfigByCompanyInfo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\":{\n        \"username\": \"traduvi4\"\n    },\n    \"object\":{\n        \"id\": 1,\n        \"user_id\": 4\n    }\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8888/api/datn/service/getServiceConfigByCompanyInfo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"service",
+								"getServiceConfigByCompanyInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllPackageConfig",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\": {\n        \"username\": \"traduvi1\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8888/api/datn/service/getAllPackageConfig",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"service",
+								"getAllPackageConfig"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "transaction",
+			"item": [
 				{
 					"name": "buyGamecode",
 					"request": {
@@ -278,22 +620,182 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"errorCode\": 0,\r\n    \"user\": {\r\n        \"id\": 13,\r\n        \"username\": \"traduvi8\",\r\n        \"password\": \"$2a$10$lR35j6Bzb4ea7sc/QFnA7uLexKBd/E4.bIlTDaUepTi.2ajY./kvW\",\r\n        \"email\": \"traduvi1@giangnam.com.vn\",\r\n        \"fullname\": \"Dương Thị Trang\",\r\n        \"status\": 1,\r\n        \"role\": 3,\r\n        \"created_time\": \"2024-12-13T22:28:06.000+00:00\",\r\n        \"updated_time\": \"2024-12-17T18:17:23.000+00:00\"\r\n    },\r\n    \"message\": \"Chưa cấu hình thông điệp\",\r\n    \"object\": {\r\n        \"total_item\" :  10,\r\n        \"model_id\" : 4\r\n    }\r\n       \r\n}",
+							"raw": "{\n    \"errorCode\": 0,\n    \"user\": {\n        \"id\": 4,\n        \"username\": \"traduvi4\"\n    },\n    \"message\": \"Chưa cấu hình thông điệp\",\n    \"object\": {\n        \"total_item\" :  10,\n        \"model_id\" : 2\n    }\n       \n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:8888/api/datn/service/buyGamecode"
+						"url": {
+							"raw": "http://localhost:8888/api/datn/transaction/buyGamecode",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"transaction",
+								"buyGamecode"
+							]
+						}
 					},
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "getAllTransactionBuyGamecodeByRole",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\":{\n        \"username\": \"traduvi4\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8888/api/datn/transaction/getAllTransactionBuyGamecodeByRole",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"transaction",
+								"getAllTransactionBuyGamecodeByRole"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "processTopUp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\":{\n        \"username\": \"traduvi4\"\n    },\n    \"object\":{\n        \"value\": 1000000\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8888/api/datn/transaction/processTopUp",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"transaction",
+								"processTopUp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTransTopUpByRole",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\":{\n        \"username\": \"traduvi1\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8888/api/datn/transaction/getTransTopUpByRole",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"transaction",
+								"getTransTopUpByRole"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getInactiveTransTopUp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\":{\n        \"username\": \"traduvi2\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8888/api/datn/transaction/getInactiveTransTopUp",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"transaction",
+								"getInactiveTransTopUp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "acceptTopUp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\":{\n        \"username\": \"traduvi1\"\n    },\n    \"object\":{\n        \"id\": 2\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8888/api/datn/transaction/acceptTopUp",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"datn",
+								"transaction",
+								"acceptTopUp"
+							]
+						}
 					},
 					"response": []
 				}

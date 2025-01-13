@@ -1,7 +1,10 @@
 package com.namng7.datn_v1.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.namng7.datn_v1.cache.CacheManager;
 import com.namng7.datn_v1.cache.Key;
+import com.namng7.datn_v1.config.CustomObjectMapper;
+import com.namng7.datn_v1.model.Company;
 import com.namng7.datn_v1.model.GamecodeModel;
 import com.namng7.datn_v1.model.PackageConfig;
 import com.namng7.datn_v1.model.ServiceConfig;
@@ -13,6 +16,7 @@ import com.namng7.datn_v1.repository.ServiceConfigReposiory;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class ServiceUtil {
 
@@ -62,7 +66,7 @@ public class ServiceUtil {
             }
         }
         if(isChange){
-            targetPackage.setUpdated_user_id(CacheManager.Users.AUTH_USER.getId());
+            targetPackage.setUpdated_user_id(record.getUser().getId());
         }
     }
 
@@ -82,7 +86,7 @@ public class ServiceUtil {
             }
         }
         if(isChange){
-            targetModel.setUpdated_user_id(CacheManager.Users.AUTH_USER.getId());
+            targetModel.setUpdated_user_id(record.getUser().getId());
             targetModel.setUpdated_date(new Date());
         }
     }
@@ -105,5 +109,20 @@ public class ServiceUtil {
         if(isChange){
             targetService.setExport_status(0l);
         }
+    }
+
+    public static PackageConfig convertMaptoPojoPackageConfig(LinkedHashMap<String, Object> map) throws Exception{
+        ObjectMapper objectMapper = CustomObjectMapper.getObjectMapper();
+        return objectMapper.convertValue(map, PackageConfig.class);
+    }
+
+    public static GamecodeModel convertMaptoPojoGamecodeModel(LinkedHashMap<String, Object> map) throws Exception{
+        ObjectMapper objectMapper = CustomObjectMapper.getObjectMapper();
+        return objectMapper.convertValue(map, GamecodeModel.class);
+    }
+
+    public static ServiceConfig convertMaptoPojoServiceConfig(LinkedHashMap<String, Object> map) throws Exception{
+        ObjectMapper objectMapper = CustomObjectMapper.getObjectMapper();
+        return objectMapper.convertValue(map, ServiceConfig.class);
     }
 }

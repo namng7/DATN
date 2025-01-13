@@ -7,11 +7,10 @@ import java.util.Map;
 import java.util.List;
 
 public interface DataLoaderService extends UserDetailsService {
-    Map<String, User> loadAllUser();
-    Map<Long, User> mapUserByUserID();
-    Map<Long, Company> loadAllCompany();
+    List<User> loadAllUser();
+    List<Company> loadAllCompany();
     List<GamecodeModel> loadAllGamecodeModel();
-    Map<Long, PackageConfig> loadAllPackageConfig();
+    List<PackageConfig> loadAllPackageConfig();
     Map<Long, WebserviceConfig> loadAllWebserviceConfig();
     Map<String, String> loadAllConfiguration();
 

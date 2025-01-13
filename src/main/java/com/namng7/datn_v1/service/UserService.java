@@ -10,5 +10,6 @@ public interface UserService{
     ProcessRecord registerUser(ProcessRecord record);
     ProcessRecord loginUser(ProcessRecord record);
     ProcessRecord updateInfor(ProcessRecord record);
+    void getAllUserByRole(ProcessRecord  record);
     void getUserByUserName(ProcessRecord record);
 }

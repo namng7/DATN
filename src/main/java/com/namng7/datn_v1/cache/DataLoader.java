@@ -2,6 +2,7 @@ package com.namng7.datn_v1.cache;
 
 import com.namng7.datn_v1.model.Company;
 import com.namng7.datn_v1.model.GamecodeModel;
+import com.namng7.datn_v1.model.PackageConfig;
 import com.namng7.datn_v1.model.User;
 import com.namng7.datn_v1.service.CompanyService;
 import com.namng7.datn_v1.service.DataLoaderService;
@@ -35,15 +36,35 @@ public class DataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         logger.info("Start load data...");
         try {
-            CacheManager.Users.MapUserByUsername = dataLoaderService.loadAllUser();
-            CacheManager.Users.MapUserByUserID = dataLoaderService.mapUserByUserID();
-            CacheManager.Companys.mapCompany = dataLoaderService.loadAllCompany();
+            CacheManager.Users.ListAllUser = dataLoaderService.loadAllUser();
+            CacheManager.Users.MapUserByUserID = new HashMap<>();
+            CacheManager.Users.MapUserByUsername = new HashMap<>();
+            for (User user : CacheManager.Users.ListAllUser) {
+                CacheManager.Users.MapUserByUserID.put(user.getId(), user);
+                CacheManager.Users.MapUserByUsername.put(user.getUsername(), user);
+
+            }
+            CacheManager.Companys.ListAllCompany = dataLoaderService.loadAllCompany();
+            CacheManager.Companys.MapCompany = new HashMap<>();
+            CacheManager.Companys.MapCompanyById = new HashMap<>();
+            for (Company company : CacheManager.Companys.ListAllCompany) {
+                CacheManager.Companys.MapCompany.put(company.getUser_id(), company);
+                CacheManager.Companys.MapCompanyById.put(company.getId(), company);
+            }
             ListAllGamecodeModel = dataLoaderService.loadAllGamecodeModel();
             MapGamecodeModelByID = new HashMap<>();
-            for(GamecodeModel gamecodeModel : ListAllGamecodeModel){
-                MapGamecodeModelByID.put(gamecodeModel.getId(), gamecodeModel);
+            for (GamecodeModel gamecodeModel : ListAllGamecodeModel) {
+                if (gamecodeModel.getStatus() == Key.Status.ACTIVE) {
+                    MapGamecodeModelByID.put(gamecodeModel.getId(), gamecodeModel);
+                }
             }
-            CacheManager.MapPackageConfigByID = dataLoaderService.loadAllPackageConfig();
+            CacheManager.ListAllPackageConfig = dataLoaderService.loadAllPackageConfig();
+            CacheManager.MapPackageConfigByID = new HashMap<>();
+            for (PackageConfig packageConfig : CacheManager.ListAllPackageConfig) {
+                if (packageConfig.getStatus() == Key.Status.ACTIVE) {
+                    CacheManager.MapPackageConfigByID.put(packageConfig.getId(), packageConfig);
+                }
+            }
             CacheManager.MapWsConfigByID = dataLoaderService.loadAllWebserviceConfig();
             CacheManager.MapMessageByMessageCode = dataLoaderService.loadAllConfiguration();
             logger.info("Load data success! ");

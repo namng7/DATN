@@ -16,7 +16,6 @@ import com.namng7.datn_v1.util.UserUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -41,10 +40,11 @@ public class CompanyServiceImpl implements CompanyService {
         return null;
     }
 
-
+    @Override
     public void registerCompany(ProcessRecord record) {
         try {
-            if (record.getUser().getRole() != Key.Role.COMPANY) {
+            User userinfo = CacheManager.Users.MapUserByUsername.get(record.getUser().getUsername());
+            if (userinfo == null || userinfo.getRole() != Key.Role.COMPANY) {
                 record.setErrorCode(Key.ErrorCode.INVALID_COMPANY_USER);
                 record.setMessage(MessageUtil.getMessage(Key.Message.INVALID_COMPANY_USER, logger));
                 log.setLength(0);
@@ -53,6 +53,7 @@ public class CompanyServiceImpl implements CompanyService {
                 logger.warn(log.toString());
                 return;
             }
+            record.setUser(userinfo);
             Company company = CompanyUtil.convertMaptoPojo((LinkedHashMap<String, Object>) record.getObject());
             if (CompanyUtil.validateCompany(company) != Key.ErrorCode.SUCCESS) {
                 record.setErrorCode(Key.ErrorCode.INVALID_COMPANY);
@@ -66,6 +67,7 @@ public class CompanyServiceImpl implements CompanyService {
             company.setStatus(Key.Status.INACTIVE);
             company.setUser_id(record.getUser().getId());
             Company savedCompany = CompanyUtil.saveCompany(company, companyRepository);
+            record.setObject(savedCompany);
             record.setErrorCode(Key.ErrorCode.SUCCESS);
             record.setMessage(Key.Message.REGISTER_COMPANY_SUCCESS);
             log.setLength(0);
@@ -86,19 +88,20 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void acceptRegisterCompany(ProcessRecord record) {
         try {
-
-            if (record.getUser().getRole() != Key.Role.ADMIN && record.getUser().getRole() != Key.Role.BUSSINESS) {
+            User user = CacheManager.Users.MapUserByUsername.get(record.getUser().getUsername());
+            if (user == null || (user.getRole() != Key.Role.ADMIN && user.getRole() != Key.Role.BUSSINESS)) {
                 record.setErrorCode(Key.ErrorCode.NOT_AUTH_CHANGE_INFO);
                 record.setMessage(MessageUtil.getMessage(Key.Message.NOT_AUTH_CHANGE_INFO, logger));
                 log.setLength(0);
                 log.append("User: ").append(record.getUser().getUsername()).
-                        append(": tai khoan khong du quyen thay doi thong tin. Role: ").append(record.getUser().getRole());
+                        append(": tai khoan khong du quyen thay doi thong tin. Role: ").append(user == null ? "null" : user.getId());
                 logger.warn(log.toString());
                 return;
             }
+            record.setUser(user);
             Company companyInfo = CompanyUtil.convertMaptoPojo((LinkedHashMap<String, Object>) record.getObject());
-            Company company = CacheManager.Companys.mapCompany.get(companyInfo.getUser_id());
-            if (company.getUser_id() == null || company.getUser_id() == 0l) {
+            Company company = CacheManager.Companys.MapCompany.get(companyInfo.getUser_id());
+            if (company == null || company.getUser_id() == null || company.getUser_id() == 0l) {
                 record.setErrorCode(Key.ErrorCode.INVALID_COMPANY);
                 record.setMessage(MessageUtil.getMessage(Key.Message.INVALID_REGISTER_COMPANY, logger));
                 log.setLength(0);
@@ -127,21 +130,26 @@ public class CompanyServiceImpl implements CompanyService {
                 logger.warn(log.toString());
                 return;
             }
-            ProcessRecord updateUser = new ProcessRecord(companyUser);
-            updateUser.getUser().setStatus(Key.Status.ACTIVE);
-            userService.updateInfor(updateUser);
-            if (updateUser.getErrorCode() != Key.ErrorCode.SUCCESS) {
+            ProcessRecord updateUserRecord = new ProcessRecord(user);
+            User updateInfo = new User();
+            updateInfo.setUsername(companyUser.getUsername());
+            updateInfo.setStatus(Key.Status.ACTIVE);
+            updateUserRecord.setObject(updateInfo);
+            userService.updateInfor(updateUserRecord);
+            if (updateUserRecord.getErrorCode() != Key.ErrorCode.SUCCESS) {
+                record.setErrorCode(updateUserRecord.getErrorCode());
+                record.setMessage(updateUserRecord.getMessage());
                 log.setLength(0);
                 log.append("User: ").append(record.getUser().getUsername()).
-                        append(": loi khi cap nhat status cho user: ").append(updateUser.getUser().getUsername());
+                        append(": loi khi cap nhat status cho user: ").append(updateUserRecord.getUser().getUsername());
                 logger.error(log.toString());
                 return;
             }
             company.setStatus(Key.Status.ACTIVE);
             company.setCreate_by(record.getUser().getId());
             company.setCreated_time(new Date());
-            if (record.getUser().getRole().equals(Key.Role.BUSSINESS)) {
-                company.setBussiness_care(record.getUser().getId());
+            if (user.getRole().equals(Key.Role.BUSSINESS)) {
+                company.setBussiness_care(user.getId());
             }
             Company savedCompany = CompanyUtil.saveCompany(company, companyRepository);
 
@@ -171,16 +179,11 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void updateCompany(ProcessRecord record) {
         try {
-            if (record.getUser() == null || record.getUser().getUsername() == null ||
-                    CacheManager.Users.MapUserByUsername.get(record.getUser().getUsername()) == null) {
-                record.setErrorCode(Key.ErrorCode.INVALID_USER);
-                record.setMessage(MessageUtil.getMessage(Key.Message.INVALID_USER, logger));
-                log.setLength(0);
-                log.append("tai khoan khong ton tai.");
-                logger.warn(log.toString());
+            UserUtil.validateUserRecord(record, log, logger);
+            if(record.getErrorCode() != Key.ErrorCode.SUCCESS){
                 return;
             }
-            User user = CacheManager.Users.MapUserByUsername.get(record.getUser().getUsername());
+            User user = record.getUser();
             Company mergeCompany = CompanyUtil.convertMaptoPojo((LinkedHashMap<String, Object>) record.getObject());
             if (mergeCompany.getUser_id() == null || mergeCompany.getUser_id() < 0l) {
                 record.setErrorCode(Key.ErrorCode.INVALID_USER);
@@ -191,7 +194,7 @@ public class CompanyServiceImpl implements CompanyService {
                 logger.info(log.toString());
                 return;
             }
-            Company targetCompany = CacheManager.Companys.mapCompany.get(mergeCompany.getUser_id());
+            Company targetCompany = CacheManager.Companys.MapCompany.get(mergeCompany.getUser_id());
             if (targetCompany == null) {
                 record.setErrorCode(Key.ErrorCode.INVALID_COMPANY);
                 record.setMessage(Key.Message.INVALID_COMPANY);
@@ -213,8 +216,10 @@ public class CompanyServiceImpl implements CompanyService {
             if (user.getRole() == Key.Role.ADMIN ||
                     (user.getRole() == Key.Role.BUSSINESS && targetCompany.getBussiness_care().equals(user.getId())) ||
                     (user.getRole() == Key.Role.COMPANY && targetCompany.getUser_id().equals(user.getId()))) {
+                record.setObject(mergeCompany);
+                record.setUser(user);
                 CompanyUtil.mergeInfor(record, targetCompany);
-                CompanyUtil.saveCompany(targetCompany, companyRepository);
+                record.setObject(CompanyUtil.saveCompany(targetCompany, companyRepository));
                 //companyRepository.save(targetCompany);
                 log.setLength(0);
                 log.append("User: ").append(user.getUsername()).
@@ -225,7 +230,7 @@ public class CompanyServiceImpl implements CompanyService {
                 record.setMessage(MessageUtil.getMessage(Key.Message.NOT_AUTH_CHANGE_INFO, logger));
                 log.setLength(0);
                 log.append("User: ").append(user.getUsername()).
-                        append(": tai khoan khong du quyen thay doi thong tin. Role: ").append(CacheManager.Users.AUTH_USER.getRole());
+                        append(": tai khoan khong du quyen thay doi thong tin. Role: ").append(record.getUser().getRole());
                 logger.warn(log.toString());
             }
         } catch (Exception e) {
@@ -241,23 +246,17 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void getAllCompanybyRole(ProcessRecord record) {
         try {
-
-            User user = CacheManager.Users.MapUserByUsername.get(record.getUser().getUsername());
-            if (user == null) {
-                record.setErrorCode(Key.ErrorCode.INVALID_USER);
-                record.setMessage(MessageUtil.getMessage(Key.Message.INVALID_USER, logger));
-                log.setLength(0);
-                log.append("User: ").append(record.getUser().getUsername()).
-                        append(": tai khoan khong ton tai.");
-                logger.warn(log.toString());
+            UserUtil.validateUserRecord(record, log, logger);
+            if(record.getErrorCode() != Key.ErrorCode.SUCCESS){
                 return;
             }
+            User user = record.getUser();
             if (user.getRole() == Key.Role.ADMIN) {
                 record.setObject(CacheManager.Companys.ListAllCompany);
             } else if (user.getRole() == Key.Role.BUSSINESS) {
                 List<Company> listcompany = new ArrayList<>();
                 for (Company company : CacheManager.Companys.ListAllCompany) {
-                    if (company.getBussiness_care().equals(user.getId())) {
+                    if (company.getBussiness_care() == null || company.getBussiness_care().equals(user.getId())) {
                         listcompany.add(company);
                     }
                 }
@@ -279,7 +278,7 @@ public class CompanyServiceImpl implements CompanyService {
             log.setLength(0);
             record.setErrorCode(Key.ErrorCode.SYSTEM_FAULT);
             record.setMessage(MessageUtil.getMessage(Key.Message.SYSTEM_FAULT, logger));
-            log.append("User: ").append(CacheManager.Users.AUTH_USER.getUsername()).
+            log.append("User: ").append(record.getUser().getUsername()).
                     append(": loi khi lay thong tin doanh nghiep.");
             logger.error(log.toString(), e);
         }

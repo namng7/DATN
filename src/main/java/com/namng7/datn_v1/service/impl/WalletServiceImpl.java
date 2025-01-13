@@ -4,11 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.namng7.datn_v1.cache.CacheManager;
 import com.namng7.datn_v1.cache.Key;
 import com.namng7.datn_v1.model.Company;
-import com.namng7.datn_v1.model.TransactionBuyGamecode;
 import com.namng7.datn_v1.model.Wallet;
 import com.namng7.datn_v1.object.ProcessRecord;
 import com.namng7.datn_v1.repository.WalletRepository;
-import com.namng7.datn_v1.service.TransactionBuyGamecodeService;
 import com.namng7.datn_v1.service.WalletService;
 import com.namng7.datn_v1.util.MessageUtil;
 import org.apache.logging.log4j.LogManager;
@@ -39,7 +37,7 @@ public class WalletServiceImpl implements WalletService {
                 logger.error(log.toString());
                 return;
             }
-            Company company = CacheManager.Companys.mapCompany.get(updateWallet.getCompany_id());
+            Company company = CacheManager.Companys.MapCompany.get(updateWallet.getCompany_id());
             if(company == null){
                 log.setLength(0);
                 record.setErrorCode(Key.ErrorCode.INVALID_COMPANY);

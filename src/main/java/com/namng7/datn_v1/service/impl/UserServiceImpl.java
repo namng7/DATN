@@ -1,5 +1,6 @@
 package com.namng7.datn_v1.service.impl;
 
+import com.namng7.datn_v1.model.Company;
 import com.namng7.datn_v1.model.User;
 import com.namng7.datn_v1.object.ProcessRecord;
 import com.namng7.datn_v1.repository.UserRepository;
@@ -11,8 +12,6 @@ import com.namng7.datn_v1.util.UserUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +42,7 @@ public class UserServiceImpl implements UserService {
             User cacheUser = CacheManager.Users.MapUserByUsername.get(user.getUsername());
             User registerInfo = user;
             registerInfo.setStatus(Key.Status.INACTIVE);
-            if(cacheUser != null && cacheUser.getRole().equals(Key.Role.ADMIN) && registerProcessRecord.getObject()!=null){
+            if (cacheUser != null && cacheUser.getRole().equals(Key.Role.ADMIN) && registerProcessRecord.getObject() != null) {
                 user = cacheUser;
                 registerInfo = UserUtil.convertMaptoPojo((LinkedHashMap<String, Object>) registerProcessRecord.getObject());
                 registerInfo.setStatus(Key.Status.ACTIVE);
@@ -62,7 +61,8 @@ public class UserServiceImpl implements UserService {
                 return registerProcessRecord;
             }
             registerInfo.setCreated_time(new Date());
-            User savedUser = UserUtil.saveUser(registerInfo, passwordEncoder, userRepository);
+            registerInfo.setPassword(passwordEncoder.encode(registerInfo.getPassword()));
+            User savedUser = UserUtil.saveUser(registerInfo, userRepository);
             registerProcessRecord.setUser(user);
             registerProcessRecord.setObject(savedUser);
             registerProcessRecord.setErrorCode(Key.ErrorCode.SUCCESS);
@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ProcessRecord updateInfor(ProcessRecord updateRecord) {
         try {
-            User updateInfo = UserUtil.convertMaptoPojo((LinkedHashMap<String, Object>) updateRecord.getObject());
+            User updateInfo = (User) updateRecord.getObject();
             User user = CacheManager.Users.MapUserByUsername.get(updateRecord.getUser().getUsername());
 
             if (user == null || updateInfo == null || updateInfo.getUsername() == null
@@ -123,6 +123,7 @@ public class UserServiceImpl implements UserService {
                 return updateRecord;
             }
 
+            updateRecord.setUser(user);
             User userUpdate = CacheManager.Users.MapUserByUsername.get(updateInfo.getUsername());
 
             boolean isPassCheckUserUpdate = false;
@@ -134,8 +135,8 @@ public class UserServiceImpl implements UserService {
                         append(": cap nhat thong tin.");
                 logger.info(log.toString());
             } else if (user.getRole() == Key.Role.ADMIN ||
-                    (user.getRole() == Key.Role.BUSSINESS && user.getRole() == Key.Role.COMPANY &&
-                            (user.getStatus() == 0 || CacheManager.Companys.mapCompany.get(user.getId()).getBussiness_care().equals(CacheManager.Users.AUTH_USER.getId())))) {
+                    (user.getRole() == Key.Role.BUSSINESS && userUpdate.getRole() == Key.Role.COMPANY &&
+                            (userUpdate.getStatus() == 0 || CacheManager.Companys.MapCompany.get(userUpdate.getId()).getBussiness_care().equals(user.getId())))) {
                 isPassCheckUserUpdate = true;
                 log.setLength(0);
                 log.append("User: ").append(user.getUsername()).
@@ -145,9 +146,9 @@ public class UserServiceImpl implements UserService {
 
             if (isPassCheckUserUpdate) {
                 try {
-                    UserUtil.mergeInfor(updateInfo, user);
-                    User savedUser = UserUtil.saveUser(user, passwordEncoder, userRepository);
-                    updateRecord.setUser(savedUser);
+                    UserUtil.mergeInfor(passwordEncoder, updateInfo, userUpdate);
+                    User savedUser = UserUtil.saveUser(userUpdate, userRepository);
+                    updateRecord.setObject(savedUser);
                     updateRecord.setErrorCode(Key.ErrorCode.SUCCESS);
                     updateRecord.setMessage(MessageUtil.getMessage(Key.Message.UPDATE_USER_INFO_SUCCESS, logger));
                     log.setLength(0);
@@ -172,7 +173,7 @@ public class UserServiceImpl implements UserService {
                 return updateRecord;
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             log.setLength(0);
             updateRecord.setErrorCode(Key.ErrorCode.SYSTEM_FAULT);
             updateRecord.setMessage(MessageUtil.getMessage(Key.Message.SYSTEM_FAULT, logger));
@@ -181,6 +182,58 @@ public class UserServiceImpl implements UserService {
             logger.error(log.toString(), e);
         }
         return updateRecord;
+    }
+
+    @Override
+    public void getAllUserByRole(ProcessRecord record) {
+        List<User> userList = new ArrayList<>();
+        try {
+            User user = CacheManager.Users.MapUserByUsername.get(record.getUser().getUsername());
+            if (user == null) {
+                record.setErrorCode(Key.ErrorCode.INVALID_USER);
+                record.setMessage(MessageUtil.getMessage(Key.Message.INVALID_USER, logger));
+                log.setLength(0);
+                log.append("User: ").append(record.getUser().getUsername()).
+                        append(": tai khoan khong ton tai.");
+                logger.warn(log.toString());
+                return;
+            }
+            if (user.getRole() == Key.Role.ADMIN) {
+                userList.addAll(CacheManager.Users.ListAllUser);
+            } else if (user.getRole() == Key.Role.BUSSINESS) {
+                for (User companyUser : CacheManager.Users.ListAllUser) {
+                    if (companyUser.getRole() == Key.Role.COMPANY) {
+                        Company company = CacheManager.Companys.MapCompany.get(companyUser.getId());
+                        if (company != null && company.getBussiness_care().equals(user.getId())) {
+                            userList.add(companyUser);
+                        }
+                    }
+                }
+            }else{
+                record.setErrorCode(Key.ErrorCode.NOT_AUTH_CHANGE_INFO);
+                record.setMessage(MessageUtil.getMessage(Key.Message.NOT_AUTH_CHANGE_INFO, logger));
+                log.setLength(0);
+                log.append("User: ").append(record.getUser().getUsername()).
+                        append(": tai khoan khong du quyen thay doi thong tin.");
+                logger.warn(log.toString());
+                return;
+            }
+            record.setUser(user);
+            record.setObject(userList);
+            record.setErrorCode(Key.ErrorCode.SUCCESS);
+            record.setMessage(MessageUtil.getMessage(Key.Message.GET_USER_INFO_SUCCESS, logger));
+            log.setLength(0);
+            log.append("User: ").append(record.getUser().getUsername()).
+                    append(": lay thong tin tai khoan thanh cong.");
+            logger.info(log.toString());
+        } catch (Exception e) {
+            log.setLength(0);
+            record.setErrorCode(Key.ErrorCode.SYSTEM_FAULT);
+            record.setMessage(MessageUtil.getMessage(Key.Message.SYSTEM_FAULT, logger));
+            log.append("User: ").append(record.getUser().getUsername()).
+                    append(": loi khi lay thong tin tai khoan.");
+            logger.error(log.toString(), e);
+        }
     }
 
     @Override
@@ -214,7 +267,7 @@ public class UserServiceImpl implements UserService {
             log.append("User: ").append(record.getUser().getUsername()).
                     append(": lay thong tin tai khoan thanh cong.");
             logger.info(log.toString());
-        }catch(Exception e){
+        } catch (Exception e) {
             log.setLength(0);
             record.setErrorCode(Key.ErrorCode.SYSTEM_FAULT);
             record.setMessage(MessageUtil.getMessage(Key.Message.SYSTEM_FAULT, logger));

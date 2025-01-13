@@ -30,6 +30,16 @@ public class CompanyController {
     @PostMapping("/register")
     public ResponseEntity<?> registerCompany(@RequestBody ProcessRecord record){
         try{
+            companyService.registerCompany(record);
+            return ResponseEntity.ok(record);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(record);
+        }
+    }
+
+    @PostMapping("/acceptRegisterCompany")
+    public ResponseEntity<?> acceptRegisterCompany(@RequestBody ProcessRecord record){
+        try{
             companyService.acceptRegisterCompany(record);
             return ResponseEntity.ok(record);
         } catch (Exception e) {
@@ -40,6 +50,10 @@ public class CompanyController {
     @PostMapping("/getCompanyByUserID")
     public  ResponseEntity<?> getCompanyByUserID(@RequestBody ProcessRecord record){
         try {
+            UserUtil.validateUserRecord(record, log, logger);
+            if(record.getErrorCode() != Key.ErrorCode.SUCCESS){
+                return ResponseEntity.badRequest().body(record);
+            }
             User user = UserUtil.convertMaptoPojo((LinkedHashMap<String, Object>) record.getObject());
             if (user.getId() == null || user.getId() < 1) {
                 record.setErrorCode(Key.ErrorCode.INVALID_USER);
@@ -63,7 +77,7 @@ public class CompanyController {
                 return ResponseEntity.badRequest().body(record);
             }
 
-            Company company = CacheManager.Companys.mapCompany.get(user.getId());
+            Company company = CacheManager.Companys.MapCompany.get(user.getId());
 
             if (company == null) {
                 record.setErrorCode(Key.ErrorCode.INVALID_COMPANY);
@@ -79,7 +93,7 @@ public class CompanyController {
             return ResponseEntity.ok(record);
         }catch (Exception e){
             log.setLength(0);
-            log.append("User: ").append(CacheManager.Users.AUTH_USER.getUsername()).
+            log.append("User: ").append(record.getUser().getUsername()).
                     append(": loi khi lay thong tin doanh nghiep.");
             logger.warn(log.toString());
             return ResponseEntity.badRequest().body(record);
